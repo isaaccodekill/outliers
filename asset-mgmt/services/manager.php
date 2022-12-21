@@ -1,15 +1,20 @@
 <?php
-require_once("../conn.php");
-require_once("./common.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/conn.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/services/common.php");
 
 class ManagerService {
-    private static $conn = DB::getConnection();
+    private static $conn;
+
+    static function init() {
+        self::$conn = DB::getConnection();
+    }
+
 
     // return assoc list of all incoming requests
     public static function getRedirectedRequests() {
         $query = "SELECT * FROM requests JOIN users ON requests.requesterId = users.id WHERE `status` = 'redirected'";
         $result = self::$conn->query($query);
-        return $result->fetch_all(MYSQL_ASSOC);
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     // true if success else false
@@ -31,7 +36,9 @@ class ManagerService {
     public static function getAllConcernedRequests() {
         $query = "SELECT * FROM requests WHERE `status` in ('accepted', 'rejected', 'redirected')";
         $result = self::$conn->query($query);
-        return $result->fetch_all(MYSQL_ASSOC);
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 }
+
+ManagerService::init();
 ?>

@@ -1,9 +1,13 @@
 <?php
-require_once("../conn.php");
-require_once("./common.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/conn.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/services/common.php");
 
 class HRService {
-    private static $conn = DB::getConnection();
+    private static $conn;
+
+    static function init() {
+        self::$conn = DB::getConnection();
+    }
 
     // returns true if insertion successful, else false
     public static function createEmployee($firstName, $lastName, $role, $email, $password) {
@@ -19,7 +23,7 @@ class HRService {
     public static function getAllEmployees() {
         $query = "SELECT * FROM users";
         $result = self::$conn->query($query);
-        return $result->fetch_all(MYSQL_ASSOC);
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     // returns null if user does not exist, else assoc list
@@ -58,7 +62,7 @@ class HRService {
     public static function getIncomingRequests() {
         $query = "SELECT * FROM requests WHERE `status` = 'open'";
         $result = self::$conn->query($query);
-        return $result->fetch_all(MYSQL_ASSOC);
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     // true if success else false
@@ -80,14 +84,16 @@ class HRService {
     public static function getResolvedRequests() {
         $query = "SELECT * FROM requests WHERE `status` in ('accepted', 'rejected')";
         $result = self::$conn->query($query);
-        return $result->fetch_all(MYSQL_ASSOC);
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     // return assoc list of all approved requests and users that made them
     public static function getApprovedRequests() {
         $query = "SELECT * FROM requests JOIN users on users.id = requests.requesterId WHERE `status` = 'accepted'";
         $result = self::$conn->query($query);
-        return $result->fetch_all(MYSQL_ASSOC);
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 }
+
+HRService::init();
 ?>

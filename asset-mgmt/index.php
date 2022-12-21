@@ -8,6 +8,8 @@
 </head>
 <body>
 <?php
+    require_once("./services/human-resources.php");
+    var_dump(HRService::getAllEmployees());
     echo "Hello World";
 ?>
 </body>

@@ -1,8 +1,12 @@
 <?php
-require_once("../conn.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/conn.php");
 
 class EmployeeService {
-    private static $conn = DB::getConnection();
+    private static $conn;
+
+    static function init() {
+        self::$conn = DB::getConnection();
+    }
 
     // returns true if insertion successful, else false
     public static function createRequest($title, $justification, $requesterId, $conn) {
@@ -19,8 +23,9 @@ class EmployeeService {
         $stmt->bind_param("i", $employeeId);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_all(MYSQL_ASSOC);
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 }
 
+EmployeeService::init();
 ?>

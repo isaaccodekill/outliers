@@ -1,8 +1,12 @@
 <?php
-require_once("../conn.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/conn.php");
 
 class AuthService {
-    private static $conn = DB::getConnection();
+    private static $conn;
+
+    static function init() {
+        self::$conn = DB::getConnection();
+    }
 
     // returns user data in association table if credentials are correct, else returns null
     public static function authenticate($email, $password) {
@@ -18,5 +22,7 @@ class AuthService {
         return $result->fetch_assoc();
     }
 }
+
+AuthService::init();
 
 ?>
