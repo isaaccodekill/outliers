@@ -9,6 +9,16 @@ class HRService {
         self::$conn = DB::getConnection();
     }
 
+    public static function checkEmailInUse($email) {
+        $query = "SELECT * FROM users WHERE email = ?;";
+        $stmt = self::$conn->prepare($query);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        return $result->num_rows > 0;
+    }
+
     // returns true if insertion successful, else false
     public static function createEmployee($firstName, $lastName, $role, $email, $password) {
         $query = "INSERT INTO users (firstname, lastname, email, `password`, `role`) VALUES (?, ?, ?, SHA(?), ?);";
