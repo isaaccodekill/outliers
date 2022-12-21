@@ -14,3 +14,5 @@ services:
     environment:
       - "MYSQL_ROOT_PASSWORD=password"
       - "MYSQL_DATABASE=assetmgmt"
+    volumes:
+      - "./dbinit-scripts:/docker-entrypoint-initdb.d"
