@@ -19,6 +19,34 @@ class HRService {
         return $result->num_rows > 0;
     }
 
+    private static function getRequestsCountByStatus($status) {
+        $result = self::$conn->query("SELECT COUNT(*) FROM requests WHERE `status` = '$status';");
+        $row = $result->fetch_row();
+        return $row[0];
+    }
+
+    private static function getRequestsByStatus($status) {
+        $query = "SELECT * FROM requests JOIN users ON users.id = requests.requesterId WHERE `status` = '$status' ORDER BY requests.createdAt DESC";
+        $result = self::$conn->query($query);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    // provides breakdown of requests by status
+    public static function getDashboardStatistics() {
+        $dataPoints["open"] = self::getRequestsCountByStatus("open");
+        $dataPoints["accepted"] = self::getRequestsCountByStatus("accepted");
+        $dataPoints["redirected"] = self::getRequestsCountByStatus("redirected");
+        $dataPoints["rejected"] = self::getRequestsCountByStatus("rejected");
+        return $dataPoints;
+    }
+
+    // returns top 5 latest requests
+    public static function getLatestRequests() {
+        $query = "SELECT * FROM requests JOIN users ON users.id = requests.requesterId ORDER BY requests.createdAt DESC LIMIT 5;";
+        $result = self::$conn->query($query);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     // returns true if insertion successful, else false
     public static function createEmployee($firstName, $lastName, $role, $email, $password) {
         $query = "INSERT INTO users (firstname, lastname, email, `password`, `role`) VALUES (?, ?, ?, SHA(?), ?);";
@@ -70,9 +98,7 @@ class HRService {
 
     // return assoc list of all incoming requests
     public static function getIncomingRequests() {
-        $query = "SELECT * FROM requests WHERE `status` = 'open'";
-        $result = self::$conn->query($query);
-        return $result->fetch_all(MYSQLI_ASSOC);
+        return self::getRequestsByStatus("open");
     }
 
     // true if success else false
@@ -90,18 +116,17 @@ class HRService {
         return rejectRequest($requestId, self::$conn);
     }
 
-    // return assoc list of all resolved requests
-    public static function getResolvedRequests() {
-        $query = "SELECT * FROM requests WHERE `status` in ('accepted', 'rejected')";
-        $result = self::$conn->query($query);
-        return $result->fetch_all(MYSQLI_ASSOC);
+    public static function getRedirectedRequests() {
+        return self::getRequestsByStatus("redirected");
+    }
+
+    public static function getRejectedRequests() {
+        return self::getRequestsByStatus("rejected");
     }
 
     // return assoc list of all approved requests and users that made them
     public static function getApprovedRequests() {
-        $query = "SELECT * FROM requests JOIN users on users.id = requests.requesterId WHERE `status` = 'accepted'";
-        $result = self::$conn->query($query);
-        return $result->fetch_all(MYSQLI_ASSOC);
+        return self::getRequestsByStatus("accepted");
     }
 }
 
