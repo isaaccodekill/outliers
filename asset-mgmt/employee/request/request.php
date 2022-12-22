@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asset Management Form</title>
+    <link rel="stylesheet" href="inventory/shared.css">
     <link rel="stylesheet" href="request.css">
     <script src="https://unpkg.com/phosphor-icons"></script>
 </head>
@@ -28,7 +29,7 @@
                     <p class="emp-role">Assistant</p>
                     <div class="logout">
                         <img src="img/bx_log-out-circle.jpg" alt="">
-                        <a href="../emp-index.php" class="log_out">Log out</a>
+                        <a href="../emp_index.php" class="log_out">Log out</a>
                     </div>
                 </div>
                 <div class="emp-display_img">
