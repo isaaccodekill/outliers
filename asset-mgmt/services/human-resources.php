@@ -25,6 +25,12 @@ class HRService {
         return $row[0];
     }
 
+    private static function getUsersCountByStatus($status) {
+        $result = self::$conn->query("SELECT COUNT(*) FROM users WHERE `status` = '$status';");
+        $row = $result->fetch_row();
+        return $row[0];
+    }
+
     private static function getRequestsByStatus($status) {
         $query = "SELECT * FROM requests JOIN users ON users.id = requests.requesterId WHERE `status` = '$status' ORDER BY requests.createdAt DESC";
         $result = self::$conn->query($query);
@@ -33,10 +39,12 @@ class HRService {
 
     // provides breakdown of requests by status
     public static function getDashboardStatistics() {
-        $dataPoints["open"] = self::getRequestsCountByStatus("open");
-        $dataPoints["accepted"] = self::getRequestsCountByStatus("accepted");
-        $dataPoints["redirected"] = self::getRequestsCountByStatus("redirected");
-        $dataPoints["rejected"] = self::getRequestsCountByStatus("rejected");
+        $dataPoints["openRequests"] = self::getRequestsCountByStatus("open");
+        $dataPoints["acceptedRequests"] = self::getRequestsCountByStatus("accepted");
+        $dataPoints["redirectedRequests"] = self::getRequestsCountByStatus("redirected");
+        $dataPoints["rejectedRequests"] = self::getRequestsCountByStatus("rejected");
+        $dataPoints["activeUsers"] = self::getUsersCountByStatus("active");
+        $dataPoints["inactiveUsers"] = self::getUsersCountByStatus("on-leave");
         return $dataPoints;
     }
 
@@ -49,9 +57,10 @@ class HRService {
 
     // returns true if insertion successful, else false
     public static function createEmployee($firstName, $lastName, $role, $email, $password) {
-        $query = "INSERT INTO users (firstname, lastname, email, `password`, `role`) VALUES (?, ?, ?, SHA(?), ?);";
+        $query = "INSERT INTO users (firstname, lastname, `status`, email, `password`, `role`) VALUES (?, ?, ?, ?, SHA(?), ?);";
         $stmt = self::$conn->prepare($query);
-        $stmt->bind_param("sssss", $firstName, $lastName, $email, $password, $role);
+        $status = "active";
+        $stmt->bind_param("ssssss", $firstName, $lastName, $status, $email, $password, $role);
         $status = $stmt->execute();
         $stmt->close();
         return $status;
@@ -59,7 +68,7 @@ class HRService {
 
     // returns an assoc list of all users
     public static function getAllEmployees() {
-        $query = "SELECT * FROM users";
+        $query = "SELECT * FROM users ORDER BY `status`, CASE WHEN `status` = 'active' THEN 1 WHEN `status` = 'on-leave' THEN 2 ELSE 3 END";
         $result = self::$conn->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
@@ -78,7 +87,7 @@ class HRService {
 
     // true if success else false
     public static function deleteEmployee($employeeId) {
-        $query = "DELETE FROM users WHERE id =?;";
+        $query = "UPDATE users SET `status` = 'departed' WHERE id =?;";
         $stmt = self::$conn->prepare($query);
         $stmt->bind_param("i", $employeeId);
         $status = $stmt->execute();
@@ -87,10 +96,10 @@ class HRService {
     }
 
     // true if success else false
-    public static function editEmployee($employeeId, $firstName, $lastName, $role, $email, $password) {
-        $query = "UPDATE users SET firstname = ?, lastname = ?, email = ?, `password` = ?, `role` = ? WHERE id = ?;";
+    public static function editEmployee($employeeId, $firstName, $lastName, $role, $status, $email, $password) {
+        $query = "UPDATE users SET firstname = ?, lastname = ?, email = ?, `password` = ?, `status` = ?, `role` = ? WHERE id = ?;";
         $stmt = self::$conn->prepare($query);
-        $stmt->bind_param("sssssi", $firstName, $lastName, $role, $email, $password, $employeeId);
+        $stmt->bind_param("ssssssi", $firstName, $lastName, $role, $status, $email, $password, $employeeId);
         $status = $stmt->execute();
         $stmt->close();
         return $status;

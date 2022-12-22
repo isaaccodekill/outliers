@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     `dateJoined` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `dateDeparted` DATETIME,
     `role` ENUM("manager", "hr", "staff") NOT NULL,
+    `status` ENUM("active", "on-leave", "departed"),
     PRIMARY KEY (id),
     UNIQUE KEY (email)
 );

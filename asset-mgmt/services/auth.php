@@ -8,7 +8,7 @@ class AuthService {
         self::$conn = DB::getConnection();
     }
 
-    // returns user data in association table if credentials are correct, else returns null
+    // returns user data in association table if credentials are correct, else returns null, returns null if user departed
     public static function authenticate($email, $password) {
         $query = "SELECT * FROM users WHERE email = ? AND `password` = SHA(?);";
         $stmt = self::$conn->prepare($query);
@@ -19,7 +19,11 @@ class AuthService {
             return null;
         }
         $stmt->close();
-        return $result->fetch_assoc();
+        $data = $result->fetch_assoc();
+        if ($data["status"] === "departed") {
+            return null;
+        }
+        return $data;
     }
 }
 
