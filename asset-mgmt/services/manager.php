@@ -19,7 +19,7 @@ class ManagerService {
 
     // true if success else false
     public static function acceptRequest($requestId) {
-        $query = "UPDATE request SET `state` = 'accepted' WHERE id = ?;";
+        $query = "UPDATE requests SET `state` = 'accepted', resolvedAt = NOW() WHERE id = ?;";
         $stmt = self::$conn->prepare($query);
         $stmt->bind_param("i", $requestId);
         $status = $stmt->execute();
