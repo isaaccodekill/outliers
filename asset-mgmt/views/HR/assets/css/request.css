@@ -1,0 +1,152 @@
+@import "employee-user-details.css";
+
+*{
+    font-family: Roboto;
+    margin: 0;
+    padding: 0;
+}
+
+.request {
+    display: grid;
+    grid-template-columns: 390px auto;
+    grid-column-gap: 48px;
+    padding: 40px;
+}
+
+.requestBody{
+    padding-top: 32px;
+}
+
+.requestBodyHeader{
+    font-size: 28px;
+    line-height: 42px;
+    color: #000000;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+.requestBodySectionHeader{
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 38px;
+    color: #000000;
+    margin-bottom: 32px;
+}
+
+.requestBodyCards{
+    display: grid;
+    padding-right: 160px;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 70px;
+    margin-bottom: 100px;
+}
+
+.requestBodyCard{
+    padding: 28px 20px;
+    background: rgba(217, 217, 217, 0.1);
+    border: 2px solid #C4C4C4;
+    border-radius: 4px;
+}
+
+.requestBodyCardHeader{
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    color: #000000;
+    margin-bottom: 28px;
+}
+
+.requestBodyCardReasonTitle{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+    margin-bottom: 8px;
+}
+
+.requestBodyCardReasonValue{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    font-style: italic;
+    color: #000000;
+    margin-bottom: 60px;
+}
+
+.requestBodyCardButtons{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 16px;
+}
+
+.requestBodyCardButton{
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 6px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    border-radius: 4px;
+    height: 40px;
+    padding: 0 12px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.requestBodyCardButton:hover{
+    filter: brightness(0.7);
+}
+
+.requestBodyCardButton.isSend{
+    color: #FFFFFF;
+    background: #000000;
+}
+
+.requestBodyCardButton.isDecline{
+    color: #000000;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.requestBodyFilters{
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+}
+
+.requestBodyFilter{
+    height: 40px;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    color: rgba(0, 0, 0, 0.56);
+    background-color: transparent;
+    border: 2px solid rgba(0, 0, 0, 0.61);
+    border-radius: 20px;
+}
+
+.requestBodyFilter.active{
+    border: none;
+    background-color: black;
+    color: white;
+}
+
+.requestBodyTable{
+    border: 1px solid gray;
+    width: 100%;
+}
+
+.requestBodyTable thead{
+    background-color: #929292;
+}
