@@ -12,7 +12,7 @@ class ManagerService {
 
     // return assoc list of all incoming requests
     public static function getRedirectedRequests() {
-        $query = "SELECT * FROM requests JOIN users ON requests.requesterId = users.id WHERE `status` = 'redirected'";
+        $query = "SELECT requests.id, requests.title, requests.justification, requests.status, requests.createdAt, users.firstname, users.lastname FROM requests JOIN users ON requests.requesterId = users.id WHERE `status` = 'redirected'";
         $result = self::$conn->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
     }

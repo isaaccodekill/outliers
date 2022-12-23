@@ -23,9 +23,9 @@
           <p>Enter your employee login details</p>
         </div>
 
-        <form action="request\request.php" method="">
+        <form action="request\index.php" method="POST">
           <div class="employee_details">
-            <input type="email" name="email" id="employee_mail" placeholder="Employee email" />
+            <input type="email" name="email" id="employee_mail" placeholder="Employee Email" />
           </div>
           <div class="employee_details">
             <input type="password" name="password" id="employee_password" placeholder="Password" />
@@ -48,6 +48,7 @@
     </div>
 
   </div>
+
 </body>
 
 </html>

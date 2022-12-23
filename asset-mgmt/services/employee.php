@@ -9,7 +9,7 @@ class EmployeeService {
     }
 
     // returns true if insertion successful, else false
-    public static function createRequest($title, $justification, $requesterId, $conn) {
+    public static function createRequest($title, $justification, $requesterId) {
         $query = "INSERT INTO requests (title, justification, requesterId) VALUES (?, ?, ?);";
         $stmt = self::$conn->prepare($query);
         $stmt->bind_param("ssi", $title, $justification, $requesterId);
