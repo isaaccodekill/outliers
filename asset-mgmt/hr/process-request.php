@@ -1,10 +1,13 @@
 <?php
+session_start();
+ob_start();
+var_dump($_SESSION);
     if(!isset($_SESSION['ishr'])){
         header('Location:login.php');
         exit();
     }
 
-    require_once($_SERVER["DOCUMENT_ROOT"] . "/outliers/asset-mgmt/services/human-resources.php");
+    require_once($_SERVER["DOCUMENT_ROOT"] . "/services/human-resources.php");
     $requestId = $_GET["requestId"];
     $action = $_GET["action"];
 

@@ -1,3 +1,7 @@
+<?php
+session_start();
+ob_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,13 +10,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/login.css">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <title>Manager Login</title>
+    <title>HR Manager Login</title>
 </head>
 <body>
 
 <?php
-session_start();
-require_once($_SERVER["DOCUMENT_ROOT"]."/outliers/asset-mgmt/services/auth.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/services/auth.php");
 
 $email = $password = '';
 
@@ -38,7 +41,7 @@ if (isset($_POST['submit'])) {
             // user has signed in, store user info into session
             $_SESSION["ishr"] = 'true';
             $_SESSION["user"] = $user;
-            header('Location:overview.php');
+            header('Location:index.php');
             exit();
         }else {
             echo '<script type="text/JavaScript"> 

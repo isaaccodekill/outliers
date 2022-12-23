@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 
 if(!isset($_SESSION['ismanager'])){
     header('Location:login.php');

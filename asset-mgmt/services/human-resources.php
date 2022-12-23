@@ -1,6 +1,6 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"]."/outliers/asset-mgmt/conn.php");
-require_once($_SERVER["DOCUMENT_ROOT"]."/outliers/asset-mgmt/services/common.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/conn.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/services/common.php");
 
 class HRService {
     private static $conn;

@@ -1,28 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./assets/css/overview.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <title>HR Overview Dashboard</title>
-</head>
-<body>
-
 <?php
 session_start();
 if(!isset($_SESSION['ishr'])){
     header('Location:login.php');
     exit();
 }
-
-require_once($_SERVER["DOCUMENT_ROOT"] . "/outliers/asset-mgmt/services/human-resources.php");
-$requests = HRService::getDashboardStatistics();
+ob_start();
 ?>
-<div class="overview">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/employees.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>HR employees Dashboard</title>
+</head>
+<body>
+
+<?php
+require_once($_SERVER["DOCUMENT_ROOT"] . "/services/human-resources.php");
+$employees = HRService::getAllEmployees();
+
+if (isset($_POST["form"])) {
+    $firstname = $_POST["firstname"];
+    $lastname = $_POST["lastname"];
+    $role = $_POST["role"];
+    $email = $_POST["email"];
+    $type = $_GET["modal"];
+
+    if ($type === "create") {
+        $password = $_POST["password"];
+        $employee = HRService::createEmployee($firstname, $lastname, $role, $email, $password);
+        header("Location: employees.php");
+    } else {
+        $status = $_POST["status"];
+        $employee = HRService::editEmployee($type, $firstname, $lastname, $role, $status, $email);
+        header("Location: employees.php");
+    }
+}
+
+if (isset($_GET["modal"]) && $_GET["modal"] !== "create") {
+    foreach ($employees as $employee) {
+        if ($employee["id"] === $_GET["modal"]) {
+            $editingEmployee = $employee;
+        }
+    }
+}
+?>
+<div class="employees">
     <div class="employeesUserDetails">
         <svg width="110" height="41" viewBox="0 0 110 41" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5.66908 20.7922C4.10966 20.7922 2.91604 20.3494 2.0882 19.4639C1.26036 18.5783 0.846439 17.3269 0.846439 15.7097V5.08255C0.846439 3.46537 1.26036 2.21399 2.0882 1.32839C2.91604 0.442798 4.10966 0 5.66908 0C7.2285 0 8.42213 0.442798 9.24997 1.32839C10.0778 2.21399 10.4917 3.46537 10.4917 5.08255V15.7097C10.4917 17.3269 10.0778 18.5783 9.24997 19.4639C8.42213 20.3494 7.2285 20.7922 5.66908 20.7922ZM5.66908 17.9044C6.76645 17.9044 7.31513 17.2402 7.31513 15.9118V4.8804C7.31513 3.55201 6.76645 2.88781 5.66908 2.88781C4.57171 2.88781 4.02303 3.55201 4.02303 4.8804V15.9118C4.02303 17.2402 4.57171 17.9044 5.66908 17.9044Z"
@@ -67,7 +95,7 @@ $requests = HRService::getDashboardStatistics();
         </svg>
         <img src="https://picsum.photos/95" alt="" class="employeesUserDetailsImage">
         <div class="employeesUserDetailsLinks">
-            <a href="overview.php" class="employeesUserDetailsLink active">
+            <a href="index.php" class="employeesUserDetailsLink">
                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15 10.5H21M2.25 21.75C2.25 21.75 8.25 7.5 9 6C9.75 4.5 11.25 4.5 12 4.5C12.75 4.5 15 4.5 15 7.5V24M33.75 21.75C33.75 21.75 27.75 7.5 27 6C26.25 4.5 24.75 4.5 24 4.5C23.25 4.5 21 4.5 21 7.5V24M15 24H21M27.75 31.5C28.6364 31.5 29.5142 31.3254 30.3331 30.9862C31.1521 30.647 31.8962 30.1498 32.523 29.523C33.1498 28.8962 33.647 28.1521 33.9862 27.3331C34.3254 26.5142 34.5 25.6364 34.5 24.75C34.5 23.8636 34.3254 22.9858 33.9862 22.1669C33.647 21.3479 33.1498 20.6038 32.523 19.977C31.8962 19.3502 31.1521 18.853 30.3331 18.5138C29.5142 18.1746 28.6364 18 27.75 18C25.9598 18 24.2429 18.7112 22.977 19.977C21.7112 21.2429 21 22.9598 21 24.75C21 26.5402 21.7112 28.2571 22.977 29.523C24.2429 30.7888 25.9598 31.5 27.75 31.5V31.5ZM8.25 31.5C7.36358 31.5 6.48583 31.3254 5.66689 30.9862C4.84794 30.647 4.10382 30.1498 3.47703 29.523C2.85023 28.8962 2.35303 28.1521 2.01381 27.3331C1.67459 26.5142 1.5 25.6364 1.5 24.75C1.5 23.8636 1.67459 22.9858 2.01381 22.1669C2.35303 21.3479 2.85023 20.6038 3.47703 19.977C4.10382 19.3502 4.84794 18.853 5.66689 18.5138C6.48583 18.1746 7.36358 18 8.25 18C10.0402 18 11.7571 18.7112 13.023 19.977C14.2888 21.2429 15 22.9598 15 24.75C15 26.5402 14.2888 28.2571 13.023 29.523C11.7571 30.7888 10.0402 31.5 8.25 31.5V31.5Z"
                           stroke="currentColor" stroke-width="2"/>
@@ -76,14 +104,17 @@ $requests = HRService::getDashboardStatistics();
             </a>
             <a href="request.php" class="employeesUserDetailsLink">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M28 13H26V11C26 8.2 23.8 6 21 6H18V4H21C24.9 4 28 7.1 28 11V13ZM22 20H25V22H22V20ZM22 24H25V26H22V24Z" fill="currentColor" fill-opacity="0.37"/>
-                    <path d="M27 30H22V28H27V18H20V27C20 28.7 18.7 30 17 30C15.3 30 14 28.7 14 27V24H16V27C16 27.6 16.4 28 17 28C17.6 28 18 27.6 18 27V16H29V28C29 29.1 28.1 30 27 30ZM12 28H11C7.1 28 4 24.9 4 21V17H6V21C6 23.8 8.2 26 11 26H12V28ZM11 10V12H14C15.1 12 16 11.1 16 10V4C16 2.9 15.1 2 14 2H4C2.9 2 2 2.9 2 4V10C2 11.1 2.9 12 4 12H6.4L8.1 15L9.8 14L7.5 10H4V4H14V10H11Z" fill="currentColor" fill-opacity="0.37"/>
+                    <path d="M28 13H26V11C26 8.2 23.8 6 21 6H18V4H21C24.9 4 28 7.1 28 11V13ZM22 20H25V22H22V20ZM22 24H25V26H22V24Z"
+                          fill="currentColor" fill-opacity="0.37"/>
+                    <path d="M27 30H22V28H27V18H20V27C20 28.7 18.7 30 17 30C15.3 30 14 28.7 14 27V24H16V27C16 27.6 16.4 28 17 28C17.6 28 18 27.6 18 27V16H29V28C29 29.1 28.1 30 27 30ZM12 28H11C7.1 28 4 24.9 4 21V17H6V21C6 23.8 8.2 26 11 26H12V28ZM11 10V12H14C15.1 12 16 11.1 16 10V4C16 2.9 15.1 2 14 2H4C2.9 2 2 2.9 2 4V10C2 11.1 2.9 12 4 12H6.4L8.1 15L9.8 14L7.5 10H4V4H14V10H11Z"
+                          fill="currentColor" fill-opacity="0.37"/>
                 </svg>
                 Requests
             </a>
-            <a href="employees.php" class="employeesUserDetailsLink">
+            <a href="employees.php" class="employeesUserDetailsLink active">
                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13.5045 8.78865C13.5045 7.62436 13.9781 6.50775 14.8212 5.68447C15.6643 4.86119 16.8077 4.39868 18 4.39868C19.1923 4.39868 20.3357 4.86119 21.1788 5.68447C22.0219 6.50775 22.4955 7.62436 22.4955 8.78865C22.4955 9.95295 22.0219 11.0696 21.1788 11.8928C20.3357 12.7161 19.1923 13.1786 18 13.1786C16.8077 13.1786 15.6643 12.7161 14.8212 11.8928C13.9781 11.0696 13.5045 9.95295 13.5045 8.78865ZM18 6.59586C17.7051 6.59586 17.4131 6.65258 17.1407 6.76278C16.8682 6.87298 16.6207 7.0345 16.4122 7.23812C16.2037 7.44174 16.0383 7.68347 15.9254 7.94951C15.8126 8.21555 15.7545 8.50069 15.7545 8.78865C15.7545 9.07661 15.8126 9.36175 15.9254 9.6278C16.0383 9.89384 16.2037 10.1356 16.4122 10.3392C16.6207 10.5428 16.8682 10.7043 17.1407 10.8145C17.4131 10.9247 17.7051 10.9814 18 10.9814C18.5955 10.9814 19.1667 10.7504 19.5878 10.3392C20.0089 9.92796 20.2455 9.37022 20.2455 8.78865C20.2455 8.20709 20.0089 7.64934 19.5878 7.23812C19.1667 6.82689 18.5955 6.59586 18 6.59586ZM24.75 9.88724C24.75 9.45444 24.8373 9.02587 25.0069 8.62601C25.1765 8.22614 25.4251 7.86282 25.7385 7.55678C26.0519 7.25074 26.424 7.00797 26.8334 6.84235C27.2429 6.67672 27.6818 6.59147 28.125 6.59147C28.5682 6.59147 29.0071 6.67672 29.4166 6.84235C29.826 7.00797 30.1981 7.25074 30.5115 7.55678C30.8249 7.86282 31.0735 8.22614 31.2431 8.62601C31.4127 9.02587 31.5 9.45444 31.5 9.88724C31.5 10.7613 31.1444 11.5996 30.5115 12.2177C29.8786 12.8358 29.0201 13.183 28.125 13.183C27.2299 13.183 26.3714 12.8358 25.7385 12.2177C25.1056 11.5996 24.75 10.7613 24.75 9.88724ZM28.125 8.78865C27.8266 8.78865 27.5405 8.9044 27.3295 9.11042C27.1185 9.31645 27 9.59588 27 9.88724C27 10.1786 27.1185 10.458 27.3295 10.6641C27.5405 10.8701 27.8266 10.9858 28.125 10.9858C28.4234 10.9858 28.7095 10.8701 28.9205 10.6641C29.1315 10.458 29.25 10.1786 29.25 9.88724C29.25 9.59588 29.1315 9.31645 28.9205 9.11042C28.7095 8.9044 28.4234 8.78865 28.125 8.78865ZM7.875 6.59147C6.9799 6.59147 6.12145 6.9387 5.48851 7.55678C4.85558 8.17486 4.5 9.01315 4.5 9.88724C4.5 10.7613 4.85558 11.5996 5.48851 12.2177C6.12145 12.8358 6.9799 13.183 7.875 13.183C8.77011 13.183 9.62855 12.8358 10.2615 12.2177C10.8944 11.5996 11.25 10.7613 11.25 9.88724C11.25 9.01315 10.8944 8.17486 10.2615 7.55678C9.62855 6.9387 8.77011 6.59147 7.875 6.59147ZM6.75 9.88724C6.75 9.59588 6.86853 9.31645 7.07951 9.11042C7.29048 8.9044 7.57663 8.78865 7.875 8.78865C8.17337 8.78865 8.45952 8.9044 8.6705 9.11042C8.88147 9.31645 9 9.59588 9 9.88724C9 10.1786 8.88147 10.458 8.6705 10.6641C8.45952 10.8701 8.17337 10.9858 7.875 10.9858C7.57663 10.9858 7.29048 10.8701 7.07951 10.6641C6.86853 10.458 6.75 10.1786 6.75 9.88724ZM9.603 15.3802C9.20701 16.0478 8.99897 16.8059 9 17.5774H4.5V23.0703C4.49982 23.6169 4.63881 24.1549 4.90448 24.6359C5.17014 25.1169 5.55413 25.5259 6.02187 25.8259C6.48962 26.126 7.02645 26.3078 7.58402 26.3549C8.14159 26.402 8.70242 26.313 9.216 26.0959C9.3825 26.8231 9.6435 27.5174 9.981 28.1656C9.12705 28.5023 8.20149 28.6291 7.28563 28.5349C6.36976 28.4407 5.49159 28.1283 4.72825 27.6252C3.9649 27.1221 3.33972 26.4437 2.90761 25.6495C2.47551 24.8553 2.24969 23.9697 2.25 23.0703V17.5774C2.25 16.9947 2.48705 16.4358 2.90901 16.0237C3.33097 15.6117 3.90326 15.3802 4.5 15.3802H9.603ZM26.019 28.1656C26.873 28.5023 27.7985 28.6291 28.7144 28.5349C29.6302 28.4407 30.5084 28.1283 31.2718 27.6252C32.0351 27.1221 32.6603 26.4437 33.0924 25.6495C33.5245 24.8553 33.7503 23.9697 33.75 23.0703V17.5774C33.75 16.9947 33.5129 16.4358 33.091 16.0237C32.669 15.6117 32.0967 15.3802 31.5 15.3802H26.397C26.7795 16.0262 27 16.7754 27 17.5774H31.5V23.0703C31.5002 23.6169 31.3612 24.1549 31.0955 24.6359C30.8299 25.1169 30.4459 25.5259 29.9781 25.8259C29.5104 26.126 28.9736 26.3078 28.416 26.3549C27.8584 26.402 27.2976 26.313 26.784 26.0959C26.6153 26.8231 26.3565 27.5174 26.019 28.1656ZM13.5 15.378C12.9033 15.378 12.331 15.6095 11.909 16.0215C11.4871 16.4336 11.25 16.9925 11.25 17.5752V24.1689C11.25 25.9171 11.9612 27.5937 13.227 28.8299C14.4929 30.066 16.2098 30.7605 18 30.7605C19.7902 30.7605 21.5071 30.066 22.773 28.8299C24.0388 27.5937 24.75 25.9171 24.75 24.1689V17.5774C24.75 16.9947 24.5129 16.4358 24.091 16.0237C23.669 15.6117 23.0967 15.3802 22.5 15.3802H13.5V15.378ZM13.5 17.5752H22.5V24.1689C22.5 25.3344 22.0259 26.4521 21.182 27.2762C20.3381 28.1003 19.1935 28.5633 18 28.5633C16.8065 28.5633 15.6619 28.1003 14.818 27.2762C13.9741 26.4521 13.5 25.3344 13.5 24.1689V17.5774V17.5752Z" fill="currentColor" fill-opacity="0.37"/>
+                    <path d="M13.5045 8.78865C13.5045 7.62436 13.9781 6.50775 14.8212 5.68447C15.6643 4.86119 16.8077 4.39868 18 4.39868C19.1923 4.39868 20.3357 4.86119 21.1788 5.68447C22.0219 6.50775 22.4955 7.62436 22.4955 8.78865C22.4955 9.95295 22.0219 11.0696 21.1788 11.8928C20.3357 12.7161 19.1923 13.1786 18 13.1786C16.8077 13.1786 15.6643 12.7161 14.8212 11.8928C13.9781 11.0696 13.5045 9.95295 13.5045 8.78865ZM18 6.59586C17.7051 6.59586 17.4131 6.65258 17.1407 6.76278C16.8682 6.87298 16.6207 7.0345 16.4122 7.23812C16.2037 7.44174 16.0383 7.68347 15.9254 7.94951C15.8126 8.21555 15.7545 8.50069 15.7545 8.78865C15.7545 9.07661 15.8126 9.36175 15.9254 9.6278C16.0383 9.89384 16.2037 10.1356 16.4122 10.3392C16.6207 10.5428 16.8682 10.7043 17.1407 10.8145C17.4131 10.9247 17.7051 10.9814 18 10.9814C18.5955 10.9814 19.1667 10.7504 19.5878 10.3392C20.0089 9.92796 20.2455 9.37022 20.2455 8.78865C20.2455 8.20709 20.0089 7.64934 19.5878 7.23812C19.1667 6.82689 18.5955 6.59586 18 6.59586ZM24.75 9.88724C24.75 9.45444 24.8373 9.02587 25.0069 8.62601C25.1765 8.22614 25.4251 7.86282 25.7385 7.55678C26.0519 7.25074 26.424 7.00797 26.8334 6.84235C27.2429 6.67672 27.6818 6.59147 28.125 6.59147C28.5682 6.59147 29.0071 6.67672 29.4166 6.84235C29.826 7.00797 30.1981 7.25074 30.5115 7.55678C30.8249 7.86282 31.0735 8.22614 31.2431 8.62601C31.4127 9.02587 31.5 9.45444 31.5 9.88724C31.5 10.7613 31.1444 11.5996 30.5115 12.2177C29.8786 12.8358 29.0201 13.183 28.125 13.183C27.2299 13.183 26.3714 12.8358 25.7385 12.2177C25.1056 11.5996 24.75 10.7613 24.75 9.88724ZM28.125 8.78865C27.8266 8.78865 27.5405 8.9044 27.3295 9.11042C27.1185 9.31645 27 9.59588 27 9.88724C27 10.1786 27.1185 10.458 27.3295 10.6641C27.5405 10.8701 27.8266 10.9858 28.125 10.9858C28.4234 10.9858 28.7095 10.8701 28.9205 10.6641C29.1315 10.458 29.25 10.1786 29.25 9.88724C29.25 9.59588 29.1315 9.31645 28.9205 9.11042C28.7095 8.9044 28.4234 8.78865 28.125 8.78865ZM7.875 6.59147C6.9799 6.59147 6.12145 6.9387 5.48851 7.55678C4.85558 8.17486 4.5 9.01315 4.5 9.88724C4.5 10.7613 4.85558 11.5996 5.48851 12.2177C6.12145 12.8358 6.9799 13.183 7.875 13.183C8.77011 13.183 9.62855 12.8358 10.2615 12.2177C10.8944 11.5996 11.25 10.7613 11.25 9.88724C11.25 9.01315 10.8944 8.17486 10.2615 7.55678C9.62855 6.9387 8.77011 6.59147 7.875 6.59147ZM6.75 9.88724C6.75 9.59588 6.86853 9.31645 7.07951 9.11042C7.29048 8.9044 7.57663 8.78865 7.875 8.78865C8.17337 8.78865 8.45952 8.9044 8.6705 9.11042C8.88147 9.31645 9 9.59588 9 9.88724C9 10.1786 8.88147 10.458 8.6705 10.6641C8.45952 10.8701 8.17337 10.9858 7.875 10.9858C7.57663 10.9858 7.29048 10.8701 7.07951 10.6641C6.86853 10.458 6.75 10.1786 6.75 9.88724ZM9.603 15.3802C9.20701 16.0478 8.99897 16.8059 9 17.5774H4.5V23.0703C4.49982 23.6169 4.63881 24.1549 4.90448 24.6359C5.17014 25.1169 5.55413 25.5259 6.02187 25.8259C6.48962 26.126 7.02645 26.3078 7.58402 26.3549C8.14159 26.402 8.70242 26.313 9.216 26.0959C9.3825 26.8231 9.6435 27.5174 9.981 28.1656C9.12705 28.5023 8.20149 28.6291 7.28563 28.5349C6.36976 28.4407 5.49159 28.1283 4.72825 27.6252C3.9649 27.1221 3.33972 26.4437 2.90761 25.6495C2.47551 24.8553 2.24969 23.9697 2.25 23.0703V17.5774C2.25 16.9947 2.48705 16.4358 2.90901 16.0237C3.33097 15.6117 3.90326 15.3802 4.5 15.3802H9.603ZM26.019 28.1656C26.873 28.5023 27.7985 28.6291 28.7144 28.5349C29.6302 28.4407 30.5084 28.1283 31.2718 27.6252C32.0351 27.1221 32.6603 26.4437 33.0924 25.6495C33.5245 24.8553 33.7503 23.9697 33.75 23.0703V17.5774C33.75 16.9947 33.5129 16.4358 33.091 16.0237C32.669 15.6117 32.0967 15.3802 31.5 15.3802H26.397C26.7795 16.0262 27 16.7754 27 17.5774H31.5V23.0703C31.5002 23.6169 31.3612 24.1549 31.0955 24.6359C30.8299 25.1169 30.4459 25.5259 29.9781 25.8259C29.5104 26.126 28.9736 26.3078 28.416 26.3549C27.8584 26.402 27.2976 26.313 26.784 26.0959C26.6153 26.8231 26.3565 27.5174 26.019 28.1656ZM13.5 15.378C12.9033 15.378 12.331 15.6095 11.909 16.0215C11.4871 16.4336 11.25 16.9925 11.25 17.5752V24.1689C11.25 25.9171 11.9612 27.5937 13.227 28.8299C14.4929 30.066 16.2098 30.7605 18 30.7605C19.7902 30.7605 21.5071 30.066 22.773 28.8299C24.0388 27.5937 24.75 25.9171 24.75 24.1689V17.5774C24.75 16.9947 24.5129 16.4358 24.091 16.0237C23.669 15.6117 23.0967 15.3802 22.5 15.3802H13.5V15.378ZM13.5 17.5752H22.5V24.1689C22.5 25.3344 22.0259 26.4521 21.182 27.2762C20.3381 28.1003 19.1935 28.5633 18 28.5633C16.8065 28.5633 15.6619 28.1003 14.818 27.2762C13.9741 26.4521 13.5 25.3344 13.5 24.1689V17.5774V17.5752Z"
+                          fill="currentColor" fill-opacity="0.37"/>
                 </svg>
                 Employees
             </a>
@@ -94,82 +125,105 @@ $requests = HRService::getDashboardStatistics();
                 Log Out
             </a>
         </div>
-    </div>
+        <p class="em">
 
-    <div class="overviewBody">
-        <h1 class="overviewBodyHeader">
-            Overview
-        </h1>
-        <h3 class="overviewBodySectionHeader">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M42 19.5H39V16.5C39 12.3 35.7 9 31.5 9H27V6H31.5C37.35 6 42 10.65 42 16.5V19.5ZM33 30H37.5V33H33V30ZM33 36H37.5V39H33V36Z"
-                      fill="black"/>
-                <path d="M40.5 45H33V42H40.5V27H30V40.5C30 43.05 28.05 45 25.5 45C22.95 45 21 43.05 21 40.5V36H24V40.5C24 41.4 24.6 42 25.5 42C26.4 42 27 41.4 27 40.5V24H43.5V42C43.5 43.65 42.15 45 40.5 45ZM18 42H16.5C10.65 42 6 37.35 6 31.5V25.5H9V31.5C9 35.7 12.3 39 16.5 39H18V42ZM16.5 15V18H21C22.65 18 24 16.65 24 15V6C24 4.35 22.65 3 21 3H6C4.35 3 3 4.35 3 6V15C3 16.65 4.35 18 6 18H9.6L12.15 22.5L14.7 21L11.25 15H6V6H21V15H16.5Z"
-                      fill="black"/>
-            </svg>
-            Statistics
-        </h3>
-        <section class="overviewBodyCards">
-            <article class="overviewBodyCard">
-                <h4 class="overviewBodyCardTitle">
-                    Open Requests
+        </p>
+    </div>
+    <div class="employeesBody">
+        <div class="employeesBodyTopRow">
+            <h1 class="employeesBodyHeader">
+                Employees
+            </h1>
+            <a href="?modal=create">
+                + Create New Employee
+            </a>
+        </div>
+        <table class="requestBodyTable">
+            <thead>
+            <tr>
+                <td>
+                    Full name
+                </td>
+                <td>
+                    Role
+                </td>
+                <td>
+                    Status
+                </td>
+                <td>
+                    Actions
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($employees as $value): ?>
+                <tr class="employeeRow">
+                    <td>
+                        <?= $value["firstname"] ?> <?= $value["lastname"] ?>
+                    </td>
+                    <td>
+                        <?= $value["role"] ?>
+                    </td>
+                    <td>
+                        <?= $value["status"] ?>
+                    </td>
+                    <td>
+                        <a href="?modal=<?= $value["id"] ?>">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 19H6.4L15.025 10.375L13.625 8.975L5 17.6V19ZM19.3 8.925L15.05 4.725L16.45 3.325C16.8333 2.94167 17.3043 2.75 17.863 2.75C18.421 2.75 18.8917 2.94167 19.275 3.325L20.675 4.725C21.0583 5.10833 21.2583 5.571 21.275 6.113C21.2917 6.65433 21.1083 7.11667 20.725 7.5L19.3 8.925ZM4 21C3.71667 21 3.47933 20.904 3.288 20.712C3.096 20.5207 3 20.2833 3 20V17.175C3 17.0417 3.025 16.9127 3.075 16.788C3.125 16.6627 3.2 16.55 3.3 16.45L13.6 6.15L17.85 10.4L7.55 20.7C7.45 20.8 7.33767 20.875 7.213 20.925C7.08767 20.975 6.95833 21 6.825 21H4ZM14.325 9.675L13.625 8.975L15.025 10.375L14.325 9.675Z"
+                                      fill="black"/>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <div class="employeesModalBackground <?= isset($_GET["modal"]) ? "show" : "" ?>">
+            <form class="employeesModal" method="post">
+                <h4 class="employeesModalTitle">
+                    <?= $_GET["modal"] === "create" ? "Create" : "Edit" ?> Employee
                 </h4>
-                <p class="overviewBodyCardValue">
-                    <?=$requests["openRequests"]?>
+                <p class="employeesModalIntro">
+                    Click Save Changes to update
                 </p>
-            </article>
-            <article class="overviewBodyCard">
-                <h4 class="overviewBodyCardTitle">
-                    Accepted Requests
-                </h4>
-                <p class="overviewBodyCardValue">
-                    <?=$requests["acceptedRequests"]?>
-                </p>
-            </article>
-            <article class="overviewBodyCard">
-                <h4 class="overviewBodyCardTitle">
-                    Redirected Requests
-                </h4>
-                <p class="overviewBodyCardValue">
-                    <?=$requests["redirectedRequests"]?>
-                </p>
-            </article>
-            <article class="overviewBodyCard">
-                <h4 class="overviewBodyCardTitle">
-                    Rejected Requests
-                </h4>
-                <p class="overviewBodyCardValue">
-                    <?=$requests["rejectedRequests"]?>
-                </p>
-            </article>
-            <article class="overviewBodyCard">
-                <h4 class="overviewBodyCardTitle">
-                    Active Employees
-                </h4>
-                <p class="overviewBodyCardValue">
-                    <?=$requests["activeUsers"]?>
-                </p>
-            </article>
-            <article class="overviewBodyCard">
-                <h4 class="overviewBodyCardTitle">
-                    Inactive Employees
-                </h4>
-                <p class="overviewBodyCardValue">
-                    <?=$requests["inactiveUsers"]?>
-                </p>
-            </article>
-        </section>
-<!-- todo: remove
-<section class="overviewLatestRequest">-->
-<!--            <div class="overviewLatestRequestTopRow">-->
-<!--                <div class="overviewLatestRequestHeader">-->
-<!--                    Latest Requests-->
-<!--                </div>-->
-<!--                <a href="" class="overviewLatestRequestLink">-->
-<!--                    View All Requests-->
-<!--                </a>-->
-<!--            </div>-->
-<!--        </section>-->
+                <?php if (isset($editingEmployee)) : ?>
+                    <input type="text" name="firstname" placeholder="First Name" class="employeesModalInput"
+                           value="<?= $editingEmployee["firstname"] ?>">
+                    <input type="text" name="lastname" placeholder="Last Name" class="employeesModalInput"
+                           value="<?= $editingEmployee["lastname"] ?>">
+                    <input type="text" name="email" placeholder="Email" class="employeesModalInput"
+                           value="<?= $editingEmployee["email"] ?>">
+                    <select name="role" id="" class="employeesModalInput">
+                        <option value="staff" selected>Staff</option>
+                        <option value="hr">HR</option>
+                        <option value="manager">Manager</option>
+                    </select>
+                <?php else: ?>
+                    <input type="text" name="firstname" placeholder="First Name" class="employeesModalInput">
+                    <input type="text" name="lastname" placeholder="Last Name" class="employeesModalInput">
+                    <select name="role" id="" class="employeesModalInput">
+                        <option value="staff" selected>Staff</option>
+                        <option value="hr">HR</option>
+                        <option value="manager">Manager</option>
+                    </select>
+                    <input type="text" name="email" placeholder="Email" class="employeesModalInput">
+                    <input type="password" name="password" placeholder="Password" class="employeesModalInput">
+                <?php endif ?>
+                <?php if ($_GET["modal"] !== "create"): ?>
+                    <select name="status" id="" class="employeesModalInput">
+                        <option value="active">Active</option>
+                        <option value="dismissed">Dismissed</option>
+                        <option value="on-leave">Leave</option>
+                    </select>
+                <?php endif ?>
+                <input type="hidden" name="form" value="1">
+                <button class="employeesModalButton">
+                    Save Changes
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 </body>

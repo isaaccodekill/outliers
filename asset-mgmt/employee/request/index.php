@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,8 +17,8 @@ session_start();
 
 <body>
 <?php
-  require_once($_SERVER["DOCUMENT_ROOT"] . "/outliers/asset-mgmt/services/auth.php");
-  require_once($_SERVER["DOCUMENT_ROOT"] . "/outliers/asset-mgmt/services/employee.php");
+  require_once($_SERVER["DOCUMENT_ROOT"] . "/services/auth.php");
+  require_once($_SERVER["DOCUMENT_ROOT"] . "/services/employee.php");
 
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
