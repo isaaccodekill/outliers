@@ -8,8 +8,10 @@
 </head>
 <body>
 <?php
+    require_once("./services/auth.php");
     require_once("./services/human-resources.php");
     var_dump(HRService::getAllEmployees());
+    var_dump(AuthService::authenticate("manager@outliers.com", "password"));
     echo "Hello World";
 ?>
 </body>

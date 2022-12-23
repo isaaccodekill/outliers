@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     `dateJoined` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `dateDeparted` DATETIME,
     `role` ENUM("manager", "hr", "staff") NOT NULL,
-    `status` ENUM("active", "on-leave", "departed"),
+    `status` ENUM("active", "on-leave", "departed") NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY (email)
 );
@@ -24,5 +24,5 @@ CREATE TABLE IF NOT EXISTS requests (
     FOREIGN KEY (requesterId) REFERENCES users(id)
 );
 
-INSERT INTO users (`firstname`, `lastname`, `email`, `password`, `role`) VALUES ("John", "Doe", "manager@outliers.com", SHA("password"), "manager");
-INSERT INTO users (`firstname`, `lastname`, `email`, `password`, `role`) VALUES ("Jane", "Doe", "hr_manager@outliers.com", SHA("password"), "hr");
+INSERT INTO users (`firstname`, `lastname`, `email`, `password`, `role`, `status`) VALUES ("John", "Doe", "manager@outliers.com", SHA("password"), "manager", "active");
+INSERT INTO users (`firstname`, `lastname`, `email`, `password`, `role`, `status`) VALUES ("Jane", "Doe", "hr_manager@outliers.com", SHA("password"), "hr", "active");
