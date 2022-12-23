@@ -11,6 +11,7 @@
 <body>
 
 <?php
+session_start();
 require_once($_SERVER["DOCUMENT_ROOT"]."/outliers/asset-mgmt/services/auth.php");
 
 $email = $password = '';
@@ -33,15 +34,11 @@ if (isset($_POST['submit'])) {
     // call login function
 
     $user = AuthService::authenticate($email, $password);
-    echo $user;
-    echo '<script type="text/JavaScript"> 
-    prompt("Alert error");
-    </script>';
-    if(!$user == null && $user['role'] === 'manager'){
+    if(isset($user) && $user['role'] === 'manager'){
         // manager has signed in, store user info into session
-        session_start();
         $_SESSION["ismanager"] = 'true';
-        header('Location: /index.php');
+        header('Location:index.php');
+        exit();
     }else {
         echo '<script type="text/JavaScript"> 
             prompt("Alert error");
@@ -58,10 +55,10 @@ if (isset($_POST['submit'])) {
         <div class="loginForm">
             <h1> Welcome back! </h1>
             <p> This page is for strictly managers</p>
-            <form action="index.php" method="POST">
+            <form action="login.php" method="POST">
                 <input type="text" name="email" placeholder="Email"/>
                 <input type="password" name="password" placeholder="Password">
-                <button class="submit" type="submit" value="submit">
+                <button class="submit" type="submit" value="submit" name="submit">
                     <span>
                         Log in
                     </span>
