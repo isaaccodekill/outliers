@@ -1,0 +1,91 @@
+*, html{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.loginWrapper{
+    height: 100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    background-color: white;
+}
+
+.loginFormContainer{
+    position: relative;
+}
+
+.logo{
+    position: absolute;
+    top: 38px;
+    left: 32px;
+}
+.loginForm{
+    height: 100vh;
+    padding: 0 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.loginForm > h1{
+    font-size: 40px;
+    line-height: 47px;
+    color: #000000;
+}
+
+.loginForm > p {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.42);
+    margin-bottom: 72px;
+}
+
+.loginForm form{
+    display: flex;
+    flex-direction: column;
+}
+.loginForm input{
+    padding: 18px 0;
+    margin-bottom: 60px;
+    border: none;
+    outline: none !important;
+    border-bottom: 1px solid black;
+    font-size: 24px;
+    line-height: 28px;
+}
+
+.loginForm input:focus{
+    border-bottom: 2px solid black;
+}
+
+.loginForm .submit{
+    padding: 21px 0;
+    border: none;
+    outline: none !important;
+    background-color: #000000;
+    font-size: 24px;
+    line-height: 28px;
+    transition: all 0.3s ease;
+    color: #fff;
+    border-radius: 5px;
+    margin-top: 40px;
+}
+
+.loginForm .submit:hover{
+    background-color: #00000069;
+}
+
+
+
+.loginImage{
+    height: 100vh;
+    overflow: hidden;
+}
+
+.loginImage img{
+    width: 100%;
+    object-fit: cover;
+}

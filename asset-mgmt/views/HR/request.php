@@ -13,6 +13,12 @@
 <body>
 
 <?php
+session_start();
+if(!isset($_SESSION['ishr'])){
+    header('Location:login.php');
+    exit();
+}
+
 require_once($_SERVER["DOCUMENT_ROOT"] . "/outliers/asset-mgmt/services/human-resources.php");
 $incomingRequests = HRService::getIncomingRequests();
 $requestType = "all";
@@ -94,13 +100,12 @@ if ($requestType === "all") {
                 </svg>
                 Employees
             </a>
-            <button class="employeesLogout">
+            <a href="./logout.php" class="employeesLogout">
                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.5 7.5H18V4.5H7.5C5.85 4.5 4.5 5.85 4.5 7.5V28.5C4.5 30.15 5.85 31.5 7.5 31.5H18V28.5H7.5V7.5ZM31.5 18L25.5 12V16.5H13.5V19.5H25.5V24L31.5 18Z"
-                          fill="black"/>
+                    <path d="M7.5 7.5H18V4.5H7.5C5.85 4.5 4.5 5.85 4.5 7.5V28.5C4.5 30.15 5.85 31.5 7.5 31.5H18V28.5H7.5V7.5ZM31.5 18L25.5 12V16.5H13.5V19.5H25.5V24L31.5 18Z" fill="black"/>
                 </svg>
                 Log Out
-            </button>
+            </a>
         </div>
     </div>
     <div class="requestBody">
