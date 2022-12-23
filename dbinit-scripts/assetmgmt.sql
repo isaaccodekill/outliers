@@ -26,3 +26,4 @@ CREATE TABLE IF NOT EXISTS requests (
 
 INSERT INTO users (`firstname`, `lastname`, `email`, `password`, `role`, `status`) VALUES ("John", "Doe", "manager@outliers.com", SHA("password"), "manager", "active");
 INSERT INTO users (`firstname`, `lastname`, `email`, `password`, `role`, `status`) VALUES ("Jane", "Doe", "hr_manager@outliers.com", SHA("password"), "hr", "active");
+INSERT INTO users (`firstname`, `lastname`, `email`, `password`, `role`, `status`) VALUES ("Janet", "Doe", "employee_manager@outliers.com", SHA("password"), "staff", "active");
