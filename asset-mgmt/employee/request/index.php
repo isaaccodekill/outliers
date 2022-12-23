@@ -16,8 +16,8 @@ session_start();
 
 <body>
 <?php
-  require_once($_SERVER["DOCUMENT_ROOT"] . "/services/auth.php");
-  require_once($_SERVER["DOCUMENT_ROOT"] . "/services/employee.php");
+  require_once($_SERVER["DOCUMENT_ROOT"] . "/outliers/asset-mgmt/services/auth.php");
+  require_once($_SERVER["DOCUMENT_ROOT"] . "/outliers/asset-mgmt/services/employee.php");
 
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -27,8 +27,7 @@ session_start();
 
         $data = AuthService::authenticate($email, $password);
         if (is_null($data)) {
-            $script = '<script>window.location = "/employee/index.php";</script>';
-            echo "$script";
+            header('Location: ../index.php');
         }
         $_SESSION["data"] = $data;
     } else if (isset($_POST["title"]) && isset($_POST["justification"])) {
@@ -43,14 +42,12 @@ session_start();
         }
         echo "$script";
     } else {
-        $script = '<script>window.location = "/employee/index.php";</script>';
-        echo "$script";
+        header('Location: ../index.php');
     }
 
   } else {
     if (!isset($_SESSION["data"])) {
-        $script = '<script>window.location = "/employee/index.php";</script>';
-        echo "$script";
+        header('Location: ../index.php');
     }
   }
 ?>
