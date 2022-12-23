@@ -2,19 +2,32 @@
 
 We make use of an Apache server with a php preprocessor.
 
-Employee Portal: /employee/
-HR Portal: /hr/
-Management Portal: /management/
+Employee Portal: http://localhost/employee/
 
-## Windows Setup
-Please refer to https://www.sitepoint.com/how-to-install-php-on-windows/ for setup and serve asset-mgmt/ as your home directory.
+HR Portal: http://localhost/hr/
 
-## MacOS Setup
-Please refer to https://gist.github.com/dreamsparkx/45fba1a25d6b175283a456b19f935ca3 for setup and serve asset-mgmt/ as your home directory.
+Management Portal: http://localhost/management/
 
+## Login Credentials
+Employee: employee_manager@outliers.com
+
+HR: hr_manager@outliers.com
+
+Manager: manager@outliers.com
+
+The password for all users is 'password'
+
+## XAMPP Setup
+* Set Document root to `<current_working_directory>/asset-mgmt/`
+* Create a database called `assetmgmt`
+* Run `dbinit-scripts/assetmgmt.sql` to create tables for db.
 
 ## Docker Setup
 ```
+# update asset-mgmt/conn.php
+$conn = new mysqli("database", "root", "password", "assetmgmt");
+
+# run
 docker-compose up
 ```
 
