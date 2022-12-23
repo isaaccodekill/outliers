@@ -1,6 +1,6 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"]."/conn.php");
-require_once($_SERVER["DOCUMENT_ROOT"]."/services/common.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/outliers/asset-mgmt/conn.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/outliers/asset-mgmt/services/common.php");
 
 class HRService {
     private static $conn;
@@ -31,8 +31,8 @@ class HRService {
         return $row[0];
     }
 
-    private static function getRequestsByStatus($status) {
-        $query = "SELECT * FROM requests JOIN users ON users.id = requests.requesterId WHERE `status` = '$status' ORDER BY requests.createdAt DESC";
+    public static function getRequestsByStatus($status) {
+        $query = "SELECT requests.id AS 'request.id', requests.title, requests.justification, requests.status, requests.createdAt, users.firstname, users.lastname FROM requests JOIN users ON requests.requesterId = users.id WHERE requests.`status` = '$status'";
         $result = self::$conn->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
@@ -69,6 +69,13 @@ class HRService {
     // returns an assoc list of all users
     public static function getAllEmployees() {
         $query = "SELECT * FROM users ORDER BY `status`, CASE WHEN `status` = 'active' THEN 1 WHEN `status` = 'on-leave' THEN 2 ELSE 3 END";
+        $result = self::$conn->query($query);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    //returns all requests
+    public static function getAllRequests() {
+        $query = "SELECT requests.id AS 'request.id', requests.title, requests.justification, requests.status, requests.createdAt, users.firstname, users.lastname FROM requests JOIN users ON requests.requesterId = users.id ORDER BY requests.createdAt DESC";
         $result = self::$conn->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
@@ -112,7 +119,7 @@ class HRService {
 
     // true if success else false
     public static function redirectRequest($requestId) {
-        $query = "UPDATE request SET `state` = 'redirected' WHERE id = ?;";
+        $query = "UPDATE requests SET `status` = 'redirected' WHERE id = ?;";
         $stmt = self::$conn->prepare($query);
         $stmt->bind_param("i", $requestId);
         $status = $stmt->execute();

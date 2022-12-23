@@ -1,0 +1,101 @@
+@import "employee-user-details.css";
+
+*{
+    font-family: Roboto;
+    margin: 0;
+    padding: 0;
+}
+
+.overview {
+    display: grid;
+    grid-template-columns: 390px auto;
+    grid-column-gap: 48px;
+    padding: 40px;
+}
+
+.overviewBody{
+    padding-top: 32px;
+}
+
+.overviewBodyHeader{
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 42px;
+    color: #000000;
+    margin-bottom: 40px;
+}
+
+.overviewBodySectionHeader{
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 38px;
+    color: #000000;
+    margin-bottom: 32px;
+}
+
+.overviewBodyCards{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /*width: 650px;*/
+    height: 370px;
+    gap: 16px;
+    margin-bottom: 60px;
+}
+
+.overviewBodyCard{
+    background: rgba(217, 217, 217, 0.02);
+    border: 1px solid #C9C9C9;
+    border-radius: 4px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.overviewBodyCardTitle{
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 29px;
+    color: #000000;
+    margin-bottom: 24px;
+}
+
+.overviewBodyCardValue{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 50px;
+    line-height: 59px;
+    color: #6B6B6B;
+}
+
+.overviewLatestRequest{
+    padding-bottom: 24px;
+}
+
+.overviewLatestRequestTopRow{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.overviewLatestRequestHeader{
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 33px;
+    color: #000000;
+}
+
+.overviewLatestRequestLink{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: rgba(0, 0, 0, 0.63);
+    text-decoration: none;
+}
+
+.overviewLatestRequestLink:hover{
+    text-decoration: underline;
+}
