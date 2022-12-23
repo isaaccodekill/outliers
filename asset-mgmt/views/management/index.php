@@ -56,7 +56,7 @@ if (isset($_POST['submit'])) {
 
 
     <div class="managerHeading">
-        <h1> Requests </h1>
+        <h1> Pending Requests </h1>
         <p> Requests that have been redirected by the Human Resources department</p>
     </div>
 

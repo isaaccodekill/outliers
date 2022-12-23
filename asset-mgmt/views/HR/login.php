@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
             // user has signed in, store user info into session
             $_SESSION["ismanager"] = 'true';
             $_SESSION["user"] = $user;
-            header('Location: HR/overview.php');
+            header('Location: overview.php');
             exit();
         }else {
             echo '<script type="text/JavaScript"> 

@@ -13,6 +13,11 @@
 <body>
 
 <?php
+if(!isset($_SESSION['ishr'])){
+    header('Location:login.php');
+    exit();
+}
+
 require_once($_SERVER["DOCUMENT_ROOT"] . "/outliers/asset-mgmt/services/human-resources.php");
 $incomingRequests = HRService::getIncomingRequests();
 $requestType = "all";
