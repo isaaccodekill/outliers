@@ -1,7 +1,7 @@
 <?php
 
 function initConn() {
-    $conn = new mysqli("localhost", "root", "", "assetmgmt");
+    $conn = new mysqli("database", "root", "password", "assetmgmt");
 
     if ($conn->connect_error) {
         printf("connection failed: %s\n", mysqli_connect_error());

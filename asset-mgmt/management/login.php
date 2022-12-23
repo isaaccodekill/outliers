@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,8 +14,7 @@
 <body>
 
 <?php
-session_start();
-require_once($_SERVER["DOCUMENT_ROOT"]."/outliers/asset-mgmt/services/auth.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/services/auth.php");
 
 $email = $password = '';
 
@@ -37,10 +39,11 @@ if (isset($_POST['submit'])) {
     if(isset($user) && $user['role'] === 'manager'){
         // manager has signed in, store user info into session
         $_SESSION["ismanager"] = 'true';
-        header('Location:index.php');
+        $script = '<script>window.location = "/management/index.php";</script>';
+        echo "$script";
         exit();
     }else {
-        echo '<script type="text/JavaScript"> 
+        echo '<script type="text/JavaScript">
             prompt("Alert error");
             </script>';
     }
