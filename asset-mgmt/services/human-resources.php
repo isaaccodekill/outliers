@@ -103,10 +103,10 @@ class HRService {
     }
 
     // true if success else false
-    public static function editEmployee($employeeId, $firstName, $lastName, $role, $status, $email, $password) {
-        $query = "UPDATE users SET firstname = ?, lastname = ?, email = ?, `password` = ?, `status` = ?, `role` = ? WHERE id = ?;";
+    public static function editEmployee($employeeId, $firstName, $lastName, $role, $status, $email) {
+        $query = "UPDATE users SET firstname = ?, lastname = ?, email = ?, `status` = ?, `role` = ? WHERE id = ?;";
         $stmt = self::$conn->prepare($query);
-        $stmt->bind_param("ssssssi", $firstName, $lastName, $role, $status, $email, $password, $employeeId);
+        $stmt->bind_param("sssssi", $firstName, $lastName, $email, $status, $role, $employeeId);
         $status = $stmt->execute();
         $stmt->close();
         return $status;
