@@ -9,3 +9,13 @@
     <title>Manager</title>
 </head>
 <body>
+<?php 
+// if(!isset($_SESSION['isManagerLoggedIn']) || $_SESSION['isManagerLoggedIn']!=1){
+//     header('Location: login.php');
+//     exit();
+// }
+
+echo "the main page";
+echo $_SESSION['ismanager'];
+?>
+</body>

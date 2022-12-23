@@ -10,19 +10,55 @@
 </head>
 <body>
 
-<?php 
-if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=1){
-    header('Location: login.php');
-    exit();
+<?php
+require_once($_SERVER["DOCUMENT_ROOT"]."/outliers/asset-mgmt/services/auth.php");
+
+$email = $password = '';
+
+// Form submit
+if (isset($_POST['submit'])) {
+
+  // Validate email
+  if (!empty($_POST['email'])) {
+    // $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+  };
+
+  if(!empty($_POST['password'])){
+    $password = filter_input(INPUT_POST, 'password', FILTER_DEFAULT);
+  }
+
+
+  if (!empty($email) && !empty($password)) {
+    // call login function
+
+    $user = AuthService::authenticate($email, $password);
+    echo $user;
+    echo '<script type="text/JavaScript"> 
+    prompt("Alert error");
+    </script>';
+    if(!$user == null && $user['role'] === 'manager'){
+        // manager has signed in, store user info into session
+        session_start();
+        $_SESSION["ismanager"] = 'true';
+        header('Location: /index.php');
+    }else {
+        echo '<script type="text/JavaScript"> 
+            prompt("Alert error");
+            </script>';
+    }
+
+  }
 }
 ?>
+
     <div class="loginWrapper">
         <div class="loginFormContainer">
         <img src="./assets/images/logo.png" class="logo" />
         <div class="loginForm">
             <h1> Welcome back! </h1>
             <p> This page is for strictly managers</p>
-            <form action="">
+            <form action="index.php" method="POST">
                 <input type="text" name="email" placeholder="Email"/>
                 <input type="password" name="password" placeholder="Password">
                 <button class="submit" type="submit" value="submit">
