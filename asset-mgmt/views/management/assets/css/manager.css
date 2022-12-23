@@ -1,0 +1,122 @@
+*, html{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.managerWrapper{
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    background-color: white;
+}
+
+.managerWrapperTop{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.managerWrapperTop a {
+    color: rgba(0, 0, 0, 0.57);
+    text-decoration: none; 
+    border-bottom: 1px solid  rgba(0, 0, 0, 0.57);
+}
+
+.managerHeading{
+    margin-bottom: 97px;
+    margin-top: 66px;
+    padding: 0 54px;
+}
+
+.managerHeading > h1{
+    font-size: 40px;
+    line-height: 47px;
+    color: #000000;
+}
+
+.managerHeading > p {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.42);
+    margin-bottom: 72px;
+}
+
+.card{
+    background-color:  rgba(248, 248, 248, 0.34);
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+}
+
+.card  h2{
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.card > span{
+    display: block;
+    color: rgba(0, 0, 0, 0.32);
+    margin-bottom: 4px;
+}
+
+.card > .description{
+    margin-top: 27px;
+    color: #3A3A3A;
+}
+
+
+.card .buttongroup{
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    gap: 16px;
+}
+
+.buttongroup button{
+    padding: 11px 12px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttongroup .black{
+    background-color: #000000;
+    color: #fff;
+    transition: all 0.3s ease;
+
+}
+.buttongroup .black:hover{
+    background-color: #00000070;
+}
+
+.buttongroup .white{
+    background-color: transparent;
+    color: #000000;
+    transition: all 0.3s ease;
+}
+
+.buttongroup .white:hover{
+    color: #00000070;
+}
+
+.incomingRequests{
+    padding: 0 54px;
+}
+
+.requestitem{
+    margin-bottom: 20px;
+}
+
+.requestitem:last-child{
+    margin-bottom: 0 !important;
+}

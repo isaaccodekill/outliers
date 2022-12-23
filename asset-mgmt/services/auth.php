@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"]."/conn.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/outliers/asset-mgmt/conn.php");
 
 class AuthService {
     private static $conn;
