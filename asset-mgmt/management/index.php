@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if(!isset($_SESSION['ismanager'])){
+    header('Location:login.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,16 +17,8 @@
     <title>Manager</title>
 </head>
 <body>
-<?php 
-session_start();
-if(!isset($_SESSION['ismanager'])){
-    header('Location:login.php');
-    exit();
-}
-
-
-
-require_once($_SERVER["DOCUMENT_ROOT"]."/outliers/asset-mgmt/services/manager.php");
+<?php
+require_once($_SERVER["DOCUMENT_ROOT"]."/services/manager.php");
 $requests = ManagerService::getRedirectedRequests();
 
 
